@@ -1,73 +1,69 @@
+<!-- index.html (Trang B) -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang B - Nhận tin nhắn</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f0f0f0;
-            margin: 0;
             padding: 20px;
         }
 
-        h1 {
-            margin-bottom: 30px;
-        }
-
-        .messages {
-            margin-top: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: white;
-            border-radius: 10px;
-        }
-
         .message {
-            background-color: #f4f4f4;
+            background-color: #e0e0e0;
             padding: 10px;
-            margin-bottom: 10px;
+            margin: 10px;
             border-radius: 5px;
         }
 
-        .message span {
+        .username {
             font-weight: bold;
-            color: #333;
         }
     </style>
 </head>
 <body>
 
-    <h1>Trang B - Tin nhắn nhận được</h1>
-
-    <!-- Khu vực hiển thị tin nhắn -->
-    <div class="messages" id="messages"></div>
+    <h1>Trang B - Nhận tin nhắn</h1>
+    <div id="messages"></div>
 
     <script type="module">
-        import { db } from './firebase-config.js';  // Đảm bảo đã cấu hình Firebase
-        import { ref, onChildAdded } from 'firebase/database';
+        import { db } from './firebase-config.js';
+        import { ref, onValue } from 'firebase/database';
 
-        // Lấy tham chiếu đến node 'messages' trong Firebase
+        // Tham chiếu đến node 'messages' trong Firebase
         const messagesRef = ref(db, 'messages');
-        const messagesDiv = document.getElementById('messages');
 
-        // Lắng nghe thay đổi trong node 'messages' và hiển thị tin nhắn mới
-        onChildAdded(messagesRef, (data) => {
-            const messageData = data.val();  // Lấy dữ liệu tin nhắn
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            messageElement.innerHTML = `
-                <span>${messageData.username}</span>: ${messageData.message}
-                <br><small>${new Date(messageData.timestamp).toLocaleString()}</small>
-            `;
-            messagesDiv.appendChild(messageElement);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Cuộn xuống tin nhắn mới nhất
+        // Lắng nghe dữ liệu tin nhắn thay đổi
+        onValue(messagesRef, (snapshot) => {
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = '';  // Xóa nội dung cũ trước khi hiển thị lại
+
+            // Lấy dữ liệu tin nhắn từ Firebase
+            const messages = snapshot.val();
+            if (messages) {
+                // Duyệt qua các tin nhắn và hiển thị
+                Object.values(messages).forEach((message) => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message');
+
+                    const usernameElement = document.createElement('div');
+                    usernameElement.classList.add('username');
+                    usernameElement.textContent = message.username;
+
+                    const messageContentElement = document.createElement('div');
+                    messageContentElement.textContent = message.message;
+
+                    messageElement.appendChild(usernameElement);
+                    messageElement.appendChild(messageContentElement);
+                    messagesContainer.appendChild(messageElement);
+                });
+            }
         });
     </script>
+
 </body>
 </html>
