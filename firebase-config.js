@@ -1,4 +1,4 @@
-// Import các hàm cần thiết từ SDK Firebase
+// firebase-config.js
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 
@@ -10,7 +10,8 @@ const firebaseConfig = {
   storageBucket: "chatapp-d03c0.appspot.com",
   messagingSenderId: "745755141877",
   appId: "1:745755141877:web:2a583a287ccc94a48c07bc",
-  measurementId: "G-CN8G3L780P"
+  measurementId: "G-CN8G3L780P",
+  databaseURL: "https://chatapp-d03c0-default-rtdb.firebaseio.com/" // URL Firebase Realtime Database
 };
 
 // Khởi tạo Firebase
