@@ -3,186 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Cá Nhân Siêu Cấp</title>
+    <title>Trang B - Nhận tin nhắn</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Cài đặt chung */
         body {
             font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
             margin: 0;
-            padding: 0;
-            color: #fff;
-            background-color: #121212;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        h1, h2, h3 {
-            margin: 20px 0;
+        h1 {
+            margin-bottom: 30px;
         }
 
-        a {
-            color: #00bfff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            color: orange;
-        }
-
-        /* Menu điều hướng */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 0;
-            display: flex;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .navbar a {
-            margin: 0 15px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .navbar a:hover {
-            text-shadow: 0 0 5px orange;
-        }
-
-        /* Ảnh đại diện */
-        .profile-container {
-            margin-top: 80px;
-            position: relative;
-            display: inline-block;
-        }
-
-        img {
-            border-radius: 50%;
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-
-        img:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.5);
-        }
-
-        /* Hộp chat */
-        .chat-box {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            width: 300px;
+        .messages {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            display: none;
         }
 
-        .chat-box header {
-            background: #00bfff;
+        .message {
+            background-color: #f4f4f4;
             padding: 10px;
-            color: white;
-            font-size: 16px;
-            border-radius: 10px 10px 0 0;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
 
-        .chat-box textarea {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            resize: none;
-            height: 80px;
-            border-radius: 0 0 10px 10px;
-        }
-
-        .chat-box button {
-            background: #00bfff;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-            border-radius: 0 0 10px 10px;
-            cursor: pointer;
-        }
-
-        .chat-box button:hover {
-            background: #007acc;
-        }
-
-        /* Hiệu ứng cuộn */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s ease-in-out;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .message span {
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <!-- Menu điều hướng -->
-    <div class="navbar">
-        <a href="#profile">Trang cá nhân</a>
-        <a href="#video">Video</a>
-        <a href="#comments">Bình luận</a>
-    </div>
 
-    <!-- Ảnh đại diện -->
-    <div id="profile" class="profile-container fade-in">
-        <img src="IMG_2728.PNG" alt="Ảnh của tôi">
-        <h2>Phạm Thế Hiển</h2>
-        <i class="fas fa-check-circle verified-icon"></i>
-    </div>
+    <h1>Trang B - Tin nhắn nhận được</h1>
 
-    <!-- Video giới thiệu -->
-    <section id="video" class="fade-in">
-        <h3>Video giới thiệu</h3>
-        <video width="320" height="180" controls>
-            <source src="Video121.mp4.MOV" type="video/mp4">
-            Trình duyệt của bạn không hỗ trợ video.
-        </video>
-    </section>
+    <!-- Khu vực hiển thị tin nhắn -->
+    <div class="messages" id="messages"></div>
 
-    <!-- Hộp chat -->
-    <div id="chat-button" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer;">
-        <i class="fas fa-comment-alt" style="font-size: 36px; color: white;"></i>
-    </div>
+    <script type="module">
+        import { db } from './firebase-config.js';  // Đảm bảo đã cấu hình Firebase
+        import { ref, onChildAdded } from 'firebase/database';
 
-    <div class="chat-box" id="chat-box">
-        <header>Hỗ trợ trực tuyến</header>
-        <textarea placeholder="Nhập tin nhắn của bạn..."></textarea>
-        <button>Gửi</button>
-    </div>
+        // Lấy tham chiếu đến node 'messages' trong Firebase
+        const messagesRef = ref(db, 'messages');
+        const messagesDiv = document.getElementById('messages');
 
-    <script>
-        // Hiệu ứng cuộn
-        const faders = document.querySelectorAll('.fade-in');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        });
-
-        faders.forEach(fader => observer.observe(fader));
-
-        // Hộp chat
-        const chatButton = document.getElementById('chat-button');
-        const chatBox = document.getElementById('chat-box');
-
-        chatButton.addEventListener('click', () => {
-            chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+        // Lắng nghe thay đổi trong node 'messages' và hiển thị tin nhắn mới
+        onChildAdded(messagesRef, (data) => {
+            const messageData = data.val();  // Lấy dữ liệu tin nhắn
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.innerHTML = `
+                <span>${messageData.username}</span>: ${messageData.message}
+                <br><small>${new Date(messageData.timestamp).toLocaleString()}</small>
+            `;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;  // Cuộn xuống tin nhắn mới nhất
         });
     </script>
 </body>
