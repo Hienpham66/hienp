@@ -3,28 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hien Pham - Trang cá nhân</title>
+    <title>Trang Cá Nhân Siêu Cấp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Cài đặt chung */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-image: url('IMG_3477.jpeg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             margin: 0;
-            padding: 20px;
-            color: white;
+            padding: 0;
+            color: #fff;
+            background-color: #121212;
+            overflow-x: hidden;
         }
 
-        h1, h2 {
+        h1, h2, h3 {
             margin: 20px 0;
         }
 
+        a {
+            color: #00bfff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: orange;
+        }
+
+        /* Menu điều hướng */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            text-shadow: 0 0 5px orange;
+        }
+
+        /* Ảnh đại diện */
         .profile-container {
-            display: inline-block;
+            margin-top: 80px;
             position: relative;
+            display: inline-block;
         }
 
         img {
@@ -32,178 +65,124 @@
             width: 150px;
             height: 150px;
             object-fit: cover;
-            margin-top: 20px;
+            transition: transform 0.3s;
         }
 
-        .verified-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 24px;
-            color: #00bfff;
+        img:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.5);
         }
 
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .social-icons a {
-            font-size: 36px;
-            color: white;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .social-icons a:hover {
-            transform: scale(1.2);
-            color: #00bfff;
-        }
-
-        #comment-section {
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
+        /* Hộp chat */
+        .chat-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            width: 300px;
             border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
         }
 
-        #comment-section h3 {
-            margin-bottom: 10px;
-            color: #333;
+        .chat-box header {
+            background: #00bfff;
+            padding: 10px;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px 10px 0 0;
         }
 
-        #comment-section textarea {
+        .chat-box textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+            border: none;
+            resize: none;
+            height: 80px;
+            border-radius: 0 0 10px 10px;
         }
 
-        #comment-section button {
+        .chat-box button {
             background: #00bfff;
             color: white;
+            padding: 10px;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            width: 100%;
+            border-radius: 0 0 10px 10px;
             cursor: pointer;
-            font-size: 16px;
         }
 
-        #comment-section button:hover {
+        .chat-box button:hover {
             background: #007acc;
         }
 
-        #comments {
-            margin-top: 15px;
-            text-align: left;
-        }
-
-        .comment {
-            background: #f0f0f0;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-        }
-
-        .color-picker {
-            margin-top: 20px;
-        }
-
-        .color-picker input {
-            padding: 5px;
-            font-size: 16px;
-        }
-
-        audio {
-            margin-top: 20px;
-        }
-
-        /* Hiệu ứng nút và phần nạp tiền */
-        #payment-section {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
+        /* Hiệu ứng cuộn */
+        .fade-in {
             opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s;
+            transform: translateY(20px);
+            transition: all 0.8s ease-in-out;
         }
 
-        #payment-section.show {
-            display: flex;
+        .fade-in.visible {
             opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <h1>Chào mừng đến với trang cá nhân của tôi</h1>
-    <h2>Phạm Thế Hiển</h2>
-    
-    <div class="profile-container">
-        <img src="IMG_2728.JPG" alt="Ảnh của tôi">
+    <!-- Menu điều hướng -->
+    <div class="navbar">
+        <a href="#profile">Trang cá nhân</a>
+        <a href="#video">Video</a>
+        <a href="#comments">Bình luận</a>
+    </div>
+
+    <!-- Ảnh đại diện -->
+    <div id="profile" class="profile-container fade-in">
+        <img src="IMG_2728.PNG" alt="Ảnh của tôi">
+        <h2>Phạm Thế Hiển</h2>
         <i class="fas fa-check-circle verified-icon"></i>
     </div>
 
-    <div class="social-icons">
-        <a href="https://www.facebook.com/hienpham192008?mibextid=LQQJ4d" target="_blank">
-            <i class="fab fa-facebook-square"></i>
-        </a>
-        <a href="https://www.tiktok.com/@betehien" target="_blank">
-            <i class="fab fa-tiktok"></i>
-        </a>
+    <!-- Video giới thiệu -->
+    <section id="video" class="fade-in">
+        <h3>Video giới thiệu</h3>
+        <video width="320" height="180" controls>
+            <source src="Video121.mp4.MOV" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ video.
+        </video>
+    </section>
+
+    <!-- Hộp chat -->
+    <div id="chat-button" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer;">
+        <i class="fas fa-comment-alt" style="font-size: 36px; color: white;"></i>
     </div>
 
-    <h3>Video giới thiệu</h3>
-    <video width="320" height="180" controls>
-        <source src="Video121.mp4.MOV" type="video/mp4">
-        Trình duyệt của bạn không hỗ trợ video.
-    </video>
-
-    <!-- Chọn màu nền -->
-    <div class="color-picker">
-        <label for="background-color">Đổi màu nền: </label>
-        <input type="color" id="background-color" />
-    </div>
-
-    <!-- Nhạc nền -->
-    <audio controls autoplay loop>
-        <source src="background-music.mp3" type="audio/mp3">
-        Trình duyệt của bạn không hỗ trợ audio.
-    </audio>
-
-    <!-- Phần bình luận -->
-    <div id="comment-section">
-        <h3>Gửi bình luận của bạn</h3>
-        <textarea id="comment-input" rows="4" placeholder="Viết bình luận..."></textarea>
-        <button id="add-comment">Gửi</button>
-        <div id="comments"></div>
+    <div class="chat-box" id="chat-box">
+        <header>Hỗ trợ trực tuyến</header>
+        <textarea placeholder="Nhập tin nhắn của bạn..."></textarea>
+        <button>Gửi</button>
     </div>
 
     <script>
-        // Thêm bình luận
-        document.getElementById("add-comment").addEventListener("click", function() {
-            const commentInput = document.getElementById("comment-input");
-            const commentText = commentInput.value.trim();
-            if (commentText) {
-                const commentSection = document.getElementById("comments");
-                const newComment = document.createElement("div");
-                newComment.classList.add("comment");
-                newComment.textContent = commentText;
-                commentSection.appendChild(newComment);
-                commentInput.value = "";
-            }
+        // Hiệu ứng cuộn
+        const faders = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
         });
 
-        // Đổi màu nền
-        document.getElementById("background-color").addEventListener("input", function(e) {
-            document.body.style.backgroundColor = e.target.value;
+        faders.forEach(fader => observer.observe(fader));
+
+        // Hộp chat
+        const chatButton = document.getElementById('chat-button');
+        const chatBox = document.getElementById('chat-box');
+
+        chatButton.addEventListener('click', () => {
+            chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
         });
     </script>
 </body>
