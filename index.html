@@ -3,98 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Bán Xlim</title>
+    <title>Form Đăng Nhập và Đăng Ký</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #0d1b2a;
             color: white;
-            margin: 0;
-        }
-        .header {
-            background-color: #1b263b;
-            text-align: center;
-            padding: 20px;
-        }
-        .header h1 {
-            color: #ff9900;
-            text-transform: uppercase;
-            margin: 0;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 20px;
-        }
-        .item {
-            background-color: #1b263b;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .item img {
-            max-width: 100%;
-            border-radius: 10px;
-        }
-        .item h3 {
-            margin: 10px 0;
-        }
-        .item p {
-            font-size: 20px;
-            color: #ff9900;
-            font-weight: bold;
-        }
-        .item button {
-            background-color: #34e89e;
-            border: none;
-            padding: 10px 20px;
-            color: #0d1b2a;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .item button:hover {
-            background-color: #28a37f;
-        }
-        .auth {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #0d1b2a;
+            margin: 0;
         }
-        .auth-form {
+        .form-container {
             background-color: #1b263b;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
             width: 300px;
+            text-align: center;
         }
-        .auth-form input {
-            width: 100%;
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container input {
+            width: 90%;
             padding: 10px;
             margin: 10px 0;
             border: none;
             border-radius: 5px;
         }
-        .auth-form button {
+        .form-container button {
+            width: 95%;
+            padding: 10px;
             background-color: #34e89e;
             border: none;
-            padding: 10px 20px;
             color: #0d1b2a;
             font-weight: bold;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
+        }
+        .form-container button:hover {
+            background-color: #28a37f;
+        }
+        .toggle-link {
+            color: #ff9900;
+            cursor: pointer;
         }
         .logout-btn {
+            margin-top: 20px;
             background-color: #e63946;
-            padding: 10px 20px;
             border: none;
             color: white;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
         }
         .logout-btn:hover {
             background-color: #d62828;
@@ -102,115 +65,101 @@
     </style>
 </head>
 <body>
-    <!-- Giao diện Đăng nhập / Đăng ký -->
-    <div class="auth" id="auth">
-        <div class="auth-form">
-            <h2 id="auth-title">Đăng Nhập</h2>
-            <input type="text" id="auth-username" placeholder="Tên đăng nhập">
-            <input type="password" id="auth-password" placeholder="Mật khẩu">
-            <button onclick="handleAuth()">Đăng Nhập</button>
-            <p id="toggle-auth">
-                Chưa có tài khoản? <a href="#" onclick="toggleAuthForm()">Đăng ký</a>
-            </p>
-        </div>
+    <!-- Form Đăng Nhập / Đăng Ký -->
+    <div id="auth-form" class="form-container">
+        <h2 id="form-title">Đăng Nhập</h2>
+        <input type="text" id="username" placeholder="Tên đăng nhập">
+        <input type="password" id="password" placeholder="Mật khẩu">
+        <button onclick="handleAuth()">Đăng Nhập</button>
+        <p>
+            <span id="toggle-text">Chưa có tài khoản?</span>
+            <span class="toggle-link" onclick="toggleForm()">Đăng ký</span>
+        </p>
     </div>
 
-    <!-- Giao diện Nội dung chính -->
-    <div id="content" style="display: none;">
-        <div class="header">
-            <h1>Shop Bán Xlim</h1>
-        </div>
-        <div class="container">
-            <div class="item">
-                <img src="https://via.placeholder.com/300x150" alt="Xlim">
-                <h3>Sản phẩm 1</h3>
-                <p>350k</p>
-                <button>Mua ngay</button>
-            </div>
-            <div class="item">
-                <img src="https://via.placeholder.com/300x150" alt="Xlim">
-                <h3>Sản phẩm 2</h3>
-                <p>350k</p>
-                <button>Mua ngay</button>
-            </div>
-        </div>
-        <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+    <!-- Nội dung sau khi đăng nhập -->
+    <div id="main-content" class="form-container" style="display: none;">
+        <h2>Chào mừng bạn!</h2>
+        <p>Bạn đã đăng nhập thành công.</p>
+        <button class="logout-btn" onclick="logout()">Đăng Xuất</button>
     </div>
 
     <script>
-        // Lưu trữ tài khoản (giả lập cơ sở dữ liệu)
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-
         // Kiểm tra trạng thái đăng nhập
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            showContent();
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentUser = localStorage.getItem("currentUser");
+            if (currentUser) {
+                showMainContent();
+            }
+        });
+
+        // Cơ sở dữ liệu người dùng (dùng localStorage)
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        // Chuyển đổi giữa Đăng Nhập / Đăng Ký
+        function toggleForm() {
+            const formTitle = document.getElementById("form-title");
+            const toggleText = document.getElementById("toggle-text");
+            const button = document.querySelector("#auth-form button");
+
+            if (formTitle.innerText === "Đăng Nhập") {
+                formTitle.innerText = "Đăng Ký";
+                toggleText.innerText = "Đã có tài khoản?";
+                button.innerText = "Đăng Ký";
+            } else {
+                formTitle.innerText = "Đăng Nhập";
+                toggleText.innerText = "Chưa có tài khoản?";
+                button.innerText = "Đăng Nhập";
+            }
         }
 
-        // Xử lý đăng nhập / đăng ký
+        // Xử lý Đăng Nhập / Đăng Ký
         function handleAuth() {
-            const username = document.getElementById('auth-username').value.trim();
-            const password = document.getElementById('auth-password').value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const formTitle = document.getElementById("form-title").innerText;
 
             if (!username || !password) {
-                alert('Vui lòng nhập đầy đủ thông tin!');
+                alert("Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
 
-            const isRegistering = document.getElementById('auth-title').innerText === 'Đăng Ký';
-
-            if (isRegistering) {
+            if (formTitle === "Đăng Ký") {
                 // Đăng ký
-                const userExists = users.some(user => user.username === username);
-                if (userExists) {
-                    alert('Tên đăng nhập đã tồn tại!');
+                if (users.some(user => user.username === username)) {
+                    alert("Tên đăng nhập đã tồn tại!");
                     return;
                 }
 
                 users.push({ username, password });
-                localStorage.setItem('users', JSON.stringify(users));
-                alert('Đăng ký thành công!');
-                toggleAuthForm(); // Chuyển sang giao diện đăng nhập
+                localStorage.setItem("users", JSON.stringify(users));
+                alert("Đăng ký thành công!");
+                toggleForm(); // Chuyển về Đăng Nhập
             } else {
                 // Đăng nhập
                 const user = users.find(user => user.username === username && user.password === password);
                 if (!user) {
-                    alert('Sai tên đăng nhập hoặc mật khẩu!');
+                    alert("Tên đăng nhập hoặc mật khẩu không đúng!");
                     return;
                 }
 
-                // Ghi nhớ trạng thái đăng nhập
-                localStorage.setItem('currentUser', username);
-                alert('Đăng nhập thành công!');
-                showContent();
+                localStorage.setItem("currentUser", username);
+                alert("Đăng nhập thành công!");
+                showMainContent();
             }
         }
 
-        // Hiển thị nội dung chính sau khi đăng nhập
-        function showContent() {
-            document.getElementById('auth').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
+        // Hiển thị nội dung sau khi đăng nhập
+        function showMainContent() {
+            document.getElementById("auth-form").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
         }
 
         // Đăng xuất
         function logout() {
-            localStorage.removeItem('currentUser');
-            document.getElementById('auth').style.display = 'flex';
-            document.getElementById('content').style.display = 'none';
-        }
-
-        // Chuyển đổi giữa giao diện đăng nhập và đăng ký
-        function toggleAuthForm() {
-            const title = document.getElementById('auth-title');
-            const toggleText = document.getElementById('toggle-auth');
-
-            if (title.innerText === 'Đăng Nhập') {
-                title.innerText = 'Đăng Ký';
-                toggleText.innerHTML = 'Đã có tài khoản? <a href="#" onclick="toggleAuthForm()">Đăng nhập</a>';
-            } else {
-                title.innerText = 'Đăng Nhập';
-                toggleText.innerHTML = 'Chưa có tài khoản? <a href="#" onclick="toggleAuthForm()">Đăng ký</a>';
-            }
+            localStorage.removeItem("currentUser");
+            document.getElementById("auth-form").style.display = "block";
+            document.getElementById("main-content").style.display = "none";
         }
     </script>
 </body>
