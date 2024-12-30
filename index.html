@@ -3,111 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập</title>
+    <title>Shop Bán Xlim</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #0d1b2a;
             color: white;
+            margin: 0;
+        }
+        .header {
+            background-color: #1b263b;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            color: #ff9900;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .item {
+            background-color: #1b263b;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .item img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .item h3 {
+            margin: 10px 0;
+        }
+        .item p {
+            font-size: 20px;
+            color: #ff9900;
+            font-weight: bold;
+        }
+        .item button {
+            background-color: #34e89e;
+            border: none;
+            padding: 10px 20px;
+            color: #0d1b2a;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .item button:hover {
+            background-color: #28a37f;
+        }
+        .login {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-        }
-        .container {
-            display: flex;
-            width: 60%;
-            background: linear-gradient(135deg, #0f3443, #34e89e);
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        .login-section {
-            flex: 1;
-            padding: 40px;
             background-color: #0d1b2a;
-            border-top-left-radius: 15px;
-            border-bottom-left-radius: 15px;
         }
-        .login-section h2 {
-            margin-bottom: 20px;
+        .login-form {
+            background-color: #1b263b;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
         }
-        .login-section input {
+        .login-form input {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: none;
             border-radius: 5px;
         }
-        .login-section button {
-            width: 100%;
-            padding: 10px;
+        .login-form button {
             background-color: #34e89e;
             border: none;
+            padding: 10px 20px;
             color: #0d1b2a;
             font-weight: bold;
             border-radius: 5px;
             cursor: pointer;
         }
-        .login-section button:hover {
-            background-color: #28a37f;
-        }
-        .login-section p {
-            margin-top: 10px;
-            text-align: center;
-        }
-        .info-section {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-section">
+    <div class="login" id="login">
+        <div class="login-form">
             <h2>Đăng Nhập</h2>
-            <input type="text" id="username" placeholder="Tên đăng nhập" />
-            <input type="password" id="password" placeholder="Mật khẩu" />
-            <button onclick="login()">Đăng Nhập</button>
-            <p>Chưa có tài khoản? <a href="#" style="color: #34e89e;" onclick="showSignup()">Đăng Ký</a></p>
+            <input type="text" id="username" placeholder="Tên đăng nhập">
+            <input type="password" id="password" placeholder="Mật khẩu">
+            <button onclick="handleLogin()">Đăng Nhập</button>
         </div>
-        <div class="info-section">
-            <h2>WELCOME BACK!</h2>
-            <p>Chào mừng trở lại! Vui lòng đăng nhập để tiếp tục.</p>
+    </div>
+    <div id="content" style="display: none;">
+        <div class="header">
+            <h1>Shop Bán Xlim</h1>
+        </div>
+        <div class="container">
+            <div class="item">
+                <img src="https://via.placeholder.com/300x150" alt="Xlim">
+                <h3>Sản phẩm 1</h3>
+                <p>350k</p>
+                <button>Mua ngay</button>
+            </div>
+            <div class="item">
+                <img src="https://via.placeholder.com/300x150" alt="Xlim">
+                <h3>Sản phẩm 2</h3>
+                <p>350k</p>
+                <button>Mua ngay</button>
+            </div>
+            <div class="item">
+                <img src="https://via.placeholder.com/300x150" alt="Xlim">
+                <h3>Sản phẩm 3</h3>
+                <p>350k</p>
+                <button>Mua ngay</button>
+            </div>
+            <div class="item">
+                <img src="https://via.placeholder.com/300x150" alt="Xlim">
+                <h3>Sản phẩm 4</h3>
+                <p>350k</p>
+                <button>Mua ngay</button>
+            </div>
         </div>
     </div>
     <script>
-        function login() {
+        function handleLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
-            // Kiểm tra thông tin đăng nhập từ Local Storage
-            const savedUser = localStorage.getItem('username');
-            const savedPass = localStorage.getItem('password');
-            
-            if (username === savedUser && password === savedPass) {
-                alert('Đăng nhập thành công!');
-            } else {
-                alert('Tên đăng nhập hoặc mật khẩu không đúng.');
-            }
-        }
 
-        function showSignup() {
-            const username = prompt('Nhập tên đăng nhập:');
-            const password = prompt('Nhập mật khẩu:');
-            
             if (username && password) {
-                // Lưu thông tin vào Local Storage
-                localStorage.setItem('username', username);
-                localStorage.setItem('password', password);
-                alert('Đăng ký thành công!');
+                // Ẩn giao diện đăng nhập, hiện nội dung chính
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
             } else {
-                alert('Thông tin không hợp lệ!');
+                alert('Vui lòng nhập đầy đủ thông tin!');
             }
         }
     </script>
