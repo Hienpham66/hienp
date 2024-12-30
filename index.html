@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Đăng Nhập và Đăng Ký</title>
+    <title>Đăng Nhập</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,25 +15,33 @@
             height: 100vh;
             margin: 0;
         }
-        .form-container {
-            background-color: #1b263b;
-            padding: 20px;
-            border-radius: 10px;
-            width: 300px;
-            text-align: center;
+        .container {
+            display: flex;
+            width: 60%;
+            background: linear-gradient(135deg, #0f3443, #34e89e);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
-        .form-container h2 {
+        .login-section {
+            flex: 1;
+            padding: 40px;
+            background-color: #0d1b2a;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+        .login-section h2 {
             margin-bottom: 20px;
         }
-        .form-container input {
-            width: 90%;
+        .login-section input {
+            width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: none;
             border-radius: 5px;
         }
-        .form-container button {
-            width: 95%;
+        .login-section button {
+            width: 100%;
             padding: 10px;
             background-color: #34e89e;
             border: none;
@@ -41,125 +49,66 @@
             font-weight: bold;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
         }
-        .form-container button:hover {
+        .login-section button:hover {
             background-color: #28a37f;
         }
-        .toggle-link {
-            color: #ff9900;
-            cursor: pointer;
+        .login-section p {
+            margin-top: 10px;
+            text-align: center;
         }
-        .logout-btn {
-            margin-top: 20px;
-            background-color: #e63946;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .logout-btn:hover {
-            background-color: #d62828;
+        .info-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <!-- Form Đăng Nhập / Đăng Ký -->
-    <div id="auth-form" class="form-container">
-        <h2 id="form-title">Đăng Nhập</h2>
-        <input type="text" id="username" placeholder="Tên đăng nhập">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button onclick="handleAuth()">Đăng Nhập</button>
-        <p>
-            <span id="toggle-text">Chưa có tài khoản?</span>
-            <span class="toggle-link" onclick="toggleForm()">Đăng ký</span>
-        </p>
+    <div class="container">
+        <div class="login-section">
+            <h2>Đăng Nhập</h2>
+            <input type="text" id="username" placeholder="Tên đăng nhập" />
+            <input type="password" id="password" placeholder="Mật khẩu" />
+            <button onclick="login()">Đăng Nhập</button>
+            <p>Chưa có tài khoản? <a href="#" style="color: #34e89e;" onclick="showSignup()">Đăng Ký</a></p>
+        </div>
+        <div class="info-section">
+            <h2>WELCOME BACK!</h2>
+            <p>Chào mừng trở lại! Vui lòng đăng nhập để tiếp tục.</p>
+        </div>
     </div>
-
-    <!-- Nội dung sau khi đăng nhập -->
-    <div id="main-content" class="form-container" style="display: none;">
-        <h2>Chào mừng bạn!</h2>
-        <p>Bạn đã đăng nhập thành công.</p>
-        <button class="logout-btn" onclick="logout()">Đăng Xuất</button>
-    </div>
-
     <script>
-        // Kiểm tra trạng thái đăng nhập
-        document.addEventListener("DOMContentLoaded", function () {
-            const currentUser = localStorage.getItem("currentUser");
-            if (currentUser) {
-                showMainContent();
-            }
-        });
-
-        // Cơ sở dữ liệu người dùng (dùng localStorage)
-        let users = JSON.parse(localStorage.getItem("users")) || [];
-
-        // Chuyển đổi giữa Đăng Nhập / Đăng Ký
-        function toggleForm() {
-            const formTitle = document.getElementById("form-title");
-            const toggleText = document.getElementById("toggle-text");
-            const button = document.querySelector("#auth-form button");
-
-            if (formTitle.innerText === "Đăng Nhập") {
-                formTitle.innerText = "Đăng Ký";
-                toggleText.innerText = "Đã có tài khoản?";
-                button.innerText = "Đăng Ký";
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Kiểm tra thông tin đăng nhập từ Local Storage
+            const savedUser = localStorage.getItem('username');
+            const savedPass = localStorage.getItem('password');
+            
+            if (username === savedUser && password === savedPass) {
+                alert('Đăng nhập thành công!');
             } else {
-                formTitle.innerText = "Đăng Nhập";
-                toggleText.innerText = "Chưa có tài khoản?";
-                button.innerText = "Đăng Nhập";
+                alert('Tên đăng nhập hoặc mật khẩu không đúng.');
             }
         }
 
-        // Xử lý Đăng Nhập / Đăng Ký
-        function handleAuth() {
-            const username = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value.trim();
-            const formTitle = document.getElementById("form-title").innerText;
-
-            if (!username || !password) {
-                alert("Vui lòng nhập đầy đủ thông tin!");
-                return;
-            }
-
-            if (formTitle === "Đăng Ký") {
-                // Đăng ký
-                if (users.some(user => user.username === username)) {
-                    alert("Tên đăng nhập đã tồn tại!");
-                    return;
-                }
-
-                users.push({ username, password });
-                localStorage.setItem("users", JSON.stringify(users));
-                alert("Đăng ký thành công!");
-                toggleForm(); // Chuyển về Đăng Nhập
+        function showSignup() {
+            const username = prompt('Nhập tên đăng nhập:');
+            const password = prompt('Nhập mật khẩu:');
+            
+            if (username && password) {
+                // Lưu thông tin vào Local Storage
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                alert('Đăng ký thành công!');
             } else {
-                // Đăng nhập
-                const user = users.find(user => user.username === username && user.password === password);
-                if (!user) {
-                    alert("Tên đăng nhập hoặc mật khẩu không đúng!");
-                    return;
-                }
-
-                localStorage.setItem("currentUser", username);
-                alert("Đăng nhập thành công!");
-                showMainContent();
+                alert('Thông tin không hợp lệ!');
             }
-        }
-
-        // Hiển thị nội dung sau khi đăng nhập
-        function showMainContent() {
-            document.getElementById("auth-form").style.display = "none";
-            document.getElementById("main-content").style.display = "block";
-        }
-
-        // Đăng xuất
-        function logout() {
-            localStorage.removeItem("currentUser");
-            document.getElementById("auth-form").style.display = "block";
-            document.getElementById("main-content").style.display = "none";
         }
     </script>
 </body>
