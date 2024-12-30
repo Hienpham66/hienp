@@ -139,7 +139,7 @@
 
     <script>
         // Lưu trữ tài khoản (giả lập cơ sở dữ liệu)
-        const users = JSON.parse(localStorage.getItem('users')) || [];
+        let users = JSON.parse(localStorage.getItem('users')) || [];
 
         // Kiểm tra trạng thái đăng nhập
         const currentUser = localStorage.getItem('currentUser');
