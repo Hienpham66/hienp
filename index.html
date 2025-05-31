@@ -1,215 +1,60 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Bán Xlim</title>
+    <title>Đăng nhập / Đăng ký</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0d1b2a;
-            color: white;
-            margin: 0;
-        }
-        .header {
-            background-color: #1b263b;
-            text-align: center;
-            padding: 20px;
-        }
-        .header h1 {
-            color: #ff9900;
-            text-transform: uppercase;
-            margin: 0;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 20px;
-        }
-        .item {
-            background-color: #1b263b;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .item img {
-            max-width: 100%;
-            border-radius: 10px;
-        }
-        .item h3 {
-            margin: 10px 0;
-        }
-        .item p {
-            font-size: 20px;
-            color: #ff9900;
-            font-weight: bold;
-        }
-        .item button {
-            background-color: #34e89e;
-            border: none;
-            padding: 10px 20px;
-            color: #0d1b2a;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .item button:hover {
-            background-color: #28a37f;
-        }
-        .login, .signup {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #0d1b2a;
-        }
-        .form-container {
-            background-color: #1b263b;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 300px;
-        }
-        .form-container input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-        }
-        .form-container button {
-            background-color: #34e89e;
-            border: none;
-            padding: 10px 20px;
-            color: #0d1b2a;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .logout {
-            text-align: center;
-            margin: 20px;
-        }
-        .logout button {
-            background-color: #ff4d4d;
-            border: none;
-            padding: 10px 20px;
-            color: white;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        body { font-family: Arial, sans-serif; }
+        #loginSection { display: none; }
+        #welcomeSection { display: none; }
     </style>
 </head>
 <body>
-    <!-- Đăng nhập -->
-    <div class="login" id="login">
-        <div class="form-container">
-            <h2>Đăng Nhập</h2>
-            <input type="text" id="loginUsername" placeholder="Tên đăng nhập">
-            <input type="password" id="loginPassword" placeholder="Mật khẩu">
-            <button onclick="handleLogin()">Đăng Nhập</button>
-            <p>Chưa có tài khoản? <a href="#" onclick="showSignup()" style="color: #34e89e;">Đăng Ký</a></p>
-        </div>
+    <div id="intro">
+        <h1>Xin chào</h1>
+        <button onclick="showLogin()">Đăng nhập / Đăng ký</button>
+    </div>
+    
+    <div id="loginSection">
+        <h2>Đăng nhập / Đăng ký</h2>
+        <input type="text" id="username" placeholder="Tên đăng nhập">
+        <button onclick="login()">Xác nhận</button>
     </div>
 
-    <!-- Đăng ký -->
-    <div class="signup" id="signup" style="display: none;">
-        <div class="form-container">
-            <h2>Đăng Ký</h2>
-            <input type="text" id="signupUsername" placeholder="Tên đăng nhập">
-            <input type="password" id="signupPassword" placeholder="Mật khẩu">
-            <button onclick="handleSignup()">Đăng Ký</button>
-            <p>Đã có tài khoản? <a href="#" onclick="showLogin()" style="color: #34e89e;">Đăng Nhập</a></p>
-        </div>
-    </div>
-
-    <!-- Nội dung -->
-    <div id="content" style="display: none;">
-        <div class="header">
-            <h1>Shop Bán Xlim</h1>
-        </div>
-        <div class="logout">
-            <button onclick="logout()">Đăng Xuất</button>
-        </div>
-        <div class="container">
-            <div class="item">
-                <img src="https://via.placeholder.com/300x150" alt="Xlim">
-                <h3>Sản phẩm 1</h3>
-                <p>350k</p>
-                <button>Mua ngay</button>
-            </div>
-            <div class="item">
-                <img src="https://via.placeholder.com/300x150" alt="Xlim">
-                <h3>Sản phẩm 2</h3>
-                <p>350k</p>
-                <button>Mua ngay</button>
-                </div>
-            <div class="item">
-                <img src="IMG_3477.jpeg" alt="Xlim">
-                <h3>Sản phẩm 2</h3>
-                <p>350k</p>
-                <button>Mua ngay</button>
-            </div>
-        </div>
+    <div id="welcomeSection">
+        <h2 id="welcomeMessage"></h2>
+        <p id="userInfo"></p>
     </div>
 
     <script>
-        // Kiểm tra trạng thái đăng nhập
-        window.onload = () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (isLoggedIn === 'true') {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
-            }
-        };
-
-        function handleLogin() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            // Kiểm tra thông tin từ Local Storage
-            const savedUsername = localStorage.getItem('username');
-            const savedPassword = localStorage.getItem('password');
-
-            if (username === savedUsername && password === savedPassword) {
-                alert('Đăng nhập thành công!');
-                localStorage.setItem('isLoggedIn', 'true');
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
-            } else {
-                alert('Sai tên đăng nhập hoặc mật khẩu!');
-            }
-        }
-
-        function handleSignup() {
-            const username = document.getElementById('signupUsername').value;
-            const password = document.getElementById('signupPassword').value;
-
-            if (username && password) {
-                localStorage.setItem('username', username);
-                localStorage.setItem('password', password);
-                alert('Đăng ký thành công!');
-                showLogin();
-            } else {
-                alert('Vui lòng nhập đầy đủ thông tin!');
-            }
-        }
-
-        function showSignup() {
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('signup').style.display = 'flex';
-        }
-
         function showLogin() {
-            document.getElementById('signup').style.display = 'none';
-            document.getElementById('login').style.display = 'flex';
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
         }
 
-        function logout() {
-            localStorage.setItem('isLoggedIn', 'false');
-            location.reload();
+        function login() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                localStorage.setItem('username', username);
+                showWelcome();
+            }
+        }
+
+        function showWelcome() {
+            const username = localStorage.getItem('username');
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('welcomeMessage').textContent = `Xin chào, ${username}!`;
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userInfo').innerHTML = `Địa chỉ IP của bạn: ${data.ip}`;
+                });
+            document.getElementById('welcomeSection').style.display = 'block';
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem('username')) {
+                showWelcome();
+            }
         }
     </script>
 </body>
