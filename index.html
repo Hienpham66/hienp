@@ -1,61 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Đăng nhập / Đăng ký</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #loginSection { display: none; }
-        #welcomeSection { display: none; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+        .circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            margin: 10px auto;
+        }
+        .login-circle {
+            background-image: url('login-image.jpg');
+        }
+        .register-circle {
+            background-image: url('register-image.jpg');
+        }
+        input[type="text"],
+        input[type="password"] {
+            display: block;
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #f3f3f3;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        a {
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <div id="intro">
-        <h1>Xin chào</h1>
-        <button onclick="showLogin()">Đăng nhập / Đăng ký</button>
+    <div class="container">
+        <div class="circle login-circle"></div>
+        <h2>Member Login</h2>
+        <input type="text" placeholder="Email">
+        <input type="password" placeholder="Password">
+        <button>LOGIN</button>
+        <a href="#">Forgot Username / Password?</a>
+        <div class="circle register-circle"></div>
+        <a href="#">Create your Account</a>
     </div>
-    
-    <div id="loginSection">
-        <h2>Đăng nhập / Đăng ký</h2>
-        <input type="text" id="username" placeholder="Tên đăng nhập">
-        <button onclick="login()">Xác nhận</button>
-    </div>
-
-    <div id="welcomeSection">
-        <h2 id="welcomeMessage"></h2>
-        <p id="userInfo"></p>
-    </div>
-
-    <script>
-        function showLogin() {
-            document.getElementById('intro').style.display = 'none';
-            document.getElementById('loginSection').style.display = 'block';
-        }
-
-        function login() {
-            const username = document.getElementById('username').value;
-            if (username) {
-                localStorage.setItem('username', username);
-                showWelcome();
-            }
-        }
-
-        function showWelcome() {
-            const username = localStorage.getItem('username');
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('welcomeMessage').textContent = `Xin chào, ${username}!`;
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('userInfo').innerHTML = `Địa chỉ IP của bạn: ${data.ip}`;
-                });
-            document.getElementById('welcomeSection').style.display = 'block';
-        }
-
-        window.onload = function() {
-            if (localStorage.getItem('username')) {
-                showWelcome();
-            }
-        }
-    </script>
 </body>
 </html>
