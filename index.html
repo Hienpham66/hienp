@@ -1,58 +1,68 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sổ Xố Ngẫu Nhiên</title>
+    <title>Ball Race Game</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
         .ball {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            background-color: #007BFF;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            line-height: 50px;
-            color: white;
-            margin: 5px;
-            cursor: pointer;
+            background-color: red;
+            position: relative;
+            transition: top 2s;
         }
-        .controls {
-            margin-bottom: 20px;
+        #raceArea {
+            position: relative;
+            height: 300px;
+            border: 1px solid black;
         }
     </style>
 </head>
 <body>
-    <div class="controls">
-        <input type="text" id="ballName" placeholder="Tên trái bóng" />
-        <button onclick="addBall()">Thêm Trái Bóng</button>
+    <div id="controlPanel">
+        <button onclick="addBall()">Add Ball</button>
+        <button onclick="removeBall()">Remove Ball</button>
+        <button onclick="startRace()">Start Race</button>
     </div>
-    <div id="ballContainer"></div>
+    <div id="raceArea"></div>
+    <div id="winnerDisplay"></div>
 
     <script>
+        const raceArea = document.getElementById("raceArea");
+        const winnerDisplay = document.getElementById("winnerDisplay");
+        let balls = [];
+
         function addBall() {
-            const ballName = document.getElementById('ballName').value.trim();
-            if (ballName === "") {
-                alert("Vui lòng nhập tên trái bóng!");
-                return;
+            const ball = document.createElement("div");
+            ball.className = "ball";
+            raceArea.appendChild(ball);
+            balls.push(ball);
+            winnerDisplay.textContent = ''; // Reset winner display
+        }
+
+        function removeBall() {
+            if(balls.length > 0) {
+                const ball = balls.pop();
+                raceArea.removeChild(ball);
             }
+        }
 
-            const ballContainer = document.getElementById('ballContainer');
-            const ball = document.createElement('div');
-            ball.className = 'ball';
-            ball.innerText = ballName;
-            ball.onclick = () => {
-                if (confirm("Bạn có chắc chắn muốn xóa trái bóng này?")) {
-                    ballContainer.removeChild(ball);
-                }
-            };
-
-            ballContainer.appendChild(ball);
-            document.getElementById('ballName').value = ""; // Clear input field
+        function startRace() {
+            if(balls.length >= 2){
+                balls.forEach((ball, index) => {
+                    const position = Math.random() * 280; // Random finish position within 300px limit
+                    ball.style.top = position + 'px';
+                    setTimeout(() => {
+                        if (!winnerDisplay.textContent) {
+                            winnerDisplay.textContent = `Ball ${index + 1} wins!`;
+                        }
+                    }, 2000);
+                });
+            } else {
+                alert("Please add at least 2 balls to start the race.");
+            }
         }
     </script>
 </body>
