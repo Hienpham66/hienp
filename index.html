@@ -3,63 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập</title>
+    <title>Sổ Xố Ngẫu Nhiên</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .login-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-top: 50px;
         }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
+        .ball {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
             background-color: #007BFF;
+            border-radius: 50%;
+            line-height: 50px;
             color: white;
-            border: none;
-            border-radius: 5px;
+            margin: 5px;
             cursor: pointer;
         }
-
-        button:hover {
-            background-color: #0056b3;
+        .controls {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Đăng Nhập</h2>
-        <form>
-            <input type="text" placeholder="Tên đăng nhập" required>
-            <input type="password" placeholder="Mật khẩu" required>
-            <button type="submit">Đăng Nhập</button>
-        </form>
+    <div class="controls">
+        <input type="text" id="ballName" placeholder="Tên trái bóng" />
+        <button onclick="addBall()">Thêm Trái Bóng</button>
     </div>
+    <div id="ballContainer"></div>
+
+    <script>
+        function addBall() {
+            const ballName = document.getElementById('ballName').value.trim();
+            if (ballName === "") {
+                alert("Vui lòng nhập tên trái bóng!");
+                return;
+            }
+
+            const ballContainer = document.getElementById('ballContainer');
+            const ball = document.createElement('div');
+            ball.className = 'ball';
+            ball.innerText = ballName;
+            ball.onclick = () => {
+                if (confirm("Bạn có chắc chắn muốn xóa trái bóng này?")) {
+                    ballContainer.removeChild(ball);
+                }
+            };
+
+            ballContainer.appendChild(ball);
+            document.getElementById('ballName').value = ""; // Clear input field
+        }
+    </script>
 </body>
 </html>
