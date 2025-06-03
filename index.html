@@ -79,6 +79,23 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Hiệu ứng lắc khi shuffle */
+    .shake {
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
   </style>
 </head>
 <body>
@@ -119,17 +136,18 @@
       nameDiv.className = 'name';
       nameDiv.textContent = name;
 
-      // Cho phép hiện lại tên sau khi shuffle
-      box.onclick = () => {
-        if (nameDiv.style.visibility === 'hidden') {
-          nameDiv.style.visibility = 'visible';
-          result.textContent = `🎉 Bạn đã chọn: ${nameDiv.textContent}`;
-        }
-      };
-
       box.appendChild(deleteBtn);
       box.appendChild(nameDiv);
       box.appendChild(input);
+
+      // Khi click vào hộp để hiện tên (nếu đang ẩn)
+      box.onclick = () => {
+        if (nameDiv.classList.contains('hidden')) {
+          nameDiv.classList.remove('hidden');
+          input.classList.remove('hidden');
+          result.textContent = `🎉 Bạn đã chọn: ${nameDiv.textContent}`;
+        }
+      };
 
       boxesContainer.appendChild(box);
     }
@@ -143,27 +161,36 @@
 
       result.textContent = '';
 
-      // Ẩn tất cả tên
+      // Ẩn tên và input trong tất cả hộp
       boxes.forEach(box => {
         const nameDiv = box.querySelector('.name');
-        nameDiv.style.visibility = 'hidden';
+        const input = box.querySelector('.edit-name');
+        nameDiv.classList.add('hidden');
+        input.classList.add('hidden');
       });
 
       let count = 0;
       const shuffleInterval = setInterval(() => {
+        // Thêm hiệu ứng shake
+        boxes.forEach(box => {
+          box.classList.add('shake');
+          setTimeout(() => box.classList.remove('shake'), 300);
+        });
+
         // Đảo vị trí ngẫu nhiên
         for (let i = boxes.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           boxesContainer.insertBefore(boxes[j], boxes[i]);
         }
+
         count++;
         if (count > 15) {
           clearInterval(shuffleInterval);
         }
-      }, 100);
+      }, 150);
     }
 
-    // Tạo sẵn 3 hộp mẫu
+    // Tạo sẵn vài hộp mẫu
     addBox("Lan");
     addBox("Hùng");
     addBox("Trang");
