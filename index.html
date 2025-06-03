@@ -1,69 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ball Race Game</title>
-    <style>
-        .ball {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: red;
-            position: relative;
-            transition: top 2s;
-        }
-        #raceArea {
-            position: relative;
-            height: 300px;
-            border: 1px solid black;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Sổ Số Bóng</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #87CEEB, #ffffff);
+      font-family: Arial, sans-serif;
+    }
+
+    #ball-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .ball {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      line-height: 60px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    #startBtn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    #winner {
+      position: absolute;
+      top: 80px;
+      left: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
 </head>
 <body>
-    <div id="controlPanel">
-        <button onclick="addBall()">Add Ball</button>
-        <button onclick="removeBall()">Remove Ball</button>
-        <button onclick="startRace()">Start Race</button>
-    </div>
-    <div id="raceArea"></div>
-    <div id="winnerDisplay"></div>
+  <button id="startBtn">🎈 Sổ Bóng</button>
+  <div id="winner"></div>
+  <div id="ball-container">
+    <!-- Bóng với tên riêng -->
+    <div class="ball" style="left:50px; top:300px;" data-name="Lan">Lan</div>
+    <div class="ball" style="left:150px; top:300px;" data-name="Hùng">Hùng</div>
+    <div class="ball" style="left:250px; top:300px;" data-name="Minh">Minh</div>
+    <div class="ball" style="left:350px; top:300px;" data-name="Hà">Hà</div>
+    <div class="ball" style="left:450px; top:300px;" data-name="Trang">Trang</div>
+  </div>
 
-    <script>
-        const raceArea = document.getElementById("raceArea");
-        const winnerDisplay = document.getElementById("winnerDisplay");
-        let balls = [];
+  <script>
+    const startBtn = document.getElementById("startBtn");
+    const balls = document.querySelectorAll(".ball");
+    const winnerDiv = document.getElementById("winner");
+    let hasWinner = false;
 
-        function addBall() {
-            const ball = document.createElement("div");
-            ball.className = "ball";
-            raceArea.appendChild(ball);
-            balls.push(ball);
-            winnerDisplay.textContent = ''; // Reset winner display
-        }
+    startBtn.addEventListener("click", () => {
+      winnerDiv.textContent = "";
+      hasWinner = false;
 
-        function removeBall() {
-            if(balls.length > 0) {
-                const ball = balls.pop();
-                raceArea.removeChild(ball);
+      balls.forEach(ball => {
+        // Reset position
+        ball.style.transition = "none";
+        ball.style.top = "300px";
+
+        // Bay tán loạn
+        const randomX = Math.random() * window.innerWidth;
+        const randomY = Math.random() * 100;
+        ball.style.left = randomX + "px";
+        ball.style.top = randomY + "px";
+
+        // Rớt xuống sau 1s
+        setTimeout(() => {
+          const fallDuration = 1000 + Math.random() * 2000;
+          ball.style.transition = `top ${fallDuration}ms ease-in`;
+          ball.style.top = (window.innerHeight - 70) + "px";
+
+          // Kiểm tra bóng nào chạm đất trước
+          setTimeout(() => {
+            if (!hasWinner) {
+              hasWinner = true;
+              const winnerName = ball.dataset.name;
+              winnerDiv.textContent = `🎉 Bóng rớt đầu tiên: ${winnerName}`;
             }
-        }
-
-        function startRace() {
-            if(balls.length >= 2){
-                balls.forEach((ball, index) => {
-                    const position = Math.random() * 280; // Random finish position within 300px limit
-                    ball.style.top = position + 'px';
-                    setTimeout(() => {
-                        if (!winnerDisplay.textContent) {
-                            winnerDisplay.textContent = `Ball ${index + 1} wins!`;
-                        }
-                    }, 2000);
-                });
-            } else {
-                alert("Please add at least 2 balls to start the race.");
-            }
-        }
-    </script>
+          }, fallDuration);
+        }, 1000);
+      });
+    });
+  </script>
 </body>
 </html>
