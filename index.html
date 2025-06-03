@@ -59,6 +59,11 @@
       line-height: 60px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
       user-select: none;
+      cursor: pointer;
+    }
+
+    .ball:hover {
+      box-shadow: 0 0 15px yellow;
     }
   </style>
 </head>
@@ -93,6 +98,13 @@
       const left = Math.random() * (window.innerWidth - 60);
       ball.style.left = `${left}px`;
       ball.style.top = `300px`;
+
+      // Xoá bóng khi double click
+      ball.addEventListener("dblclick", () => {
+        if (confirm(`Bạn có muốn xoá bóng "${name}" không?`)) {
+          ball.remove();
+        }
+      });
 
       container.appendChild(ball);
     }
@@ -141,7 +153,7 @@
       });
     });
 
-    // Tạo vài bóng mặc định
+    // Tạo sẵn vài bóng
     ["Lan", "Hùng", "Minh", "Hà", "Trang"].forEach(name => createBall(name));
   </script>
 </body>
