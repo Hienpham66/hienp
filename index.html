@@ -119,8 +119,12 @@
       nameDiv.className = 'name';
       nameDiv.textContent = name;
 
+      // Cho phép hiện lại tên sau khi shuffle
       box.onclick = () => {
-        result.textContent = `🎉 Bạn đã chọn: ${nameDiv.textContent}`;
+        if (nameDiv.style.visibility === 'hidden') {
+          nameDiv.style.visibility = 'visible';
+          result.textContent = `🎉 Bạn đã chọn: ${nameDiv.textContent}`;
+        }
       };
 
       box.appendChild(deleteBtn);
@@ -139,6 +143,12 @@
 
       result.textContent = '';
 
+      // Ẩn tất cả tên
+      boxes.forEach(box => {
+        const nameDiv = box.querySelector('.name');
+        nameDiv.style.visibility = 'hidden';
+      });
+
       let count = 0;
       const shuffleInterval = setInterval(() => {
         // Đảo vị trí ngẫu nhiên
@@ -153,7 +163,7 @@
       }, 100);
     }
 
-    // Thêm sẵn 3 hộp mẫu
+    // Tạo sẵn 3 hộp mẫu
     addBox("Lan");
     addBox("Hùng");
     addBox("Trang");
