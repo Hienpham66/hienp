@@ -4,28 +4,40 @@
   <meta charset="UTF-8">
   <title>Sáo Trộn Hộp</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
       padding: 20px;
       background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
     #controls {
       margin-bottom: 20px;
+      text-align: center;
     }
 
     #boxes {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1000px;
     }
 
     .box {
-      width: 120px;
-      height: 120px;
+      width: 180px;
+      height: 180px;
       background-color: #fff;
-      border: 2px solid #888;
-      border-radius: 10px;
+      border: 3px solid #555;
+      border-radius: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -40,51 +52,60 @@
     }
 
     .name {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      text-align: center;
+      word-wrap: break-word;
     }
 
     .delete-btn {
       position: absolute;
-      top: 5px;
-      right: 5px;
+      top: 8px;
+      right: 8px;
       background: red;
       color: white;
       border: none;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .edit-name {
-      width: 80%;
-      padding: 3px;
-      font-size: 14px;
+      width: 85%;
+      padding: 6px;
+      font-size: 16px;
       text-align: center;
     }
 
     #result {
-      margin-top: 20px;
-      font-size: 20px;
+      margin-top: 30px;
+      font-size: 24px;
       font-weight: bold;
       color: green;
+      text-align: center;
     }
 
     button {
-      margin-right: 10px;
-      padding: 10px 15px;
-      font-size: 16px;
+      margin: 5px;
+      padding: 12px 20px;
+      font-size: 18px;
       cursor: pointer;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background-color: #ddd;
+    }
+
+    button:hover {
+      background-color: #ccc;
     }
 
     .hidden {
       display: none !important;
     }
 
-    /* Hiệu ứng lắc khi shuffle */
     .shake {
       animation: shake 0.3s;
     }
@@ -136,11 +157,6 @@
       nameDiv.className = 'name';
       nameDiv.textContent = name;
 
-      box.appendChild(deleteBtn);
-      box.appendChild(nameDiv);
-      box.appendChild(input);
-
-      // Khi click vào hộp để hiện tên (nếu đang ẩn)
       box.onclick = () => {
         if (nameDiv.classList.contains('hidden')) {
           nameDiv.classList.remove('hidden');
@@ -148,6 +164,10 @@
           result.textContent = `🎉 Bạn đã chọn: ${nameDiv.textContent}`;
         }
       };
+
+      box.appendChild(deleteBtn);
+      box.appendChild(nameDiv);
+      box.appendChild(input);
 
       boxesContainer.appendChild(box);
     }
@@ -161,7 +181,7 @@
 
       result.textContent = '';
 
-      // Ẩn tên và input trong tất cả hộp
+      // Ẩn tên và input
       boxes.forEach(box => {
         const nameDiv = box.querySelector('.name');
         const input = box.querySelector('.edit-name');
@@ -171,26 +191,24 @@
 
       let count = 0;
       const shuffleInterval = setInterval(() => {
-        // Thêm hiệu ứng shake
+        // Hiệu ứng lắc
         boxes.forEach(box => {
           box.classList.add('shake');
           setTimeout(() => box.classList.remove('shake'), 300);
         });
 
-        // Đảo vị trí ngẫu nhiên
+        // Xáo trộn vị trí
         for (let i = boxes.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           boxesContainer.insertBefore(boxes[j], boxes[i]);
         }
 
         count++;
-        if (count > 15) {
-          clearInterval(shuffleInterval);
-        }
+        if (count > 15) clearInterval(shuffleInterval);
       }, 150);
     }
 
-    // Tạo sẵn vài hộp mẫu
+    // Thêm hộp mẫu
     addBox("Lan");
     addBox("Hùng");
     addBox("Trang");
