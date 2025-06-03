@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Sáo Trộn Hộp</title>
+  <title>Xáo Trộn Hộp</title>
   <style>
     * {
       box-sizing: border-box;
@@ -44,7 +44,7 @@
       justify-content: center;
       position: relative;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.3s ease;
     }
 
     .box:hover {
@@ -110,12 +110,22 @@
       animation: shake 0.3s;
     }
 
+    .float {
+      animation: floatUpDown 0.6s ease-in-out;
+    }
+
     @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-3px); }
-      100% { transform: translateX(0); }
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-4px, 4px); }
+      50% { transform: translate(4px, -4px); }
+      75% { transform: translate(-4px, -4px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes floatUpDown {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
     }
   </style>
 </head>
@@ -168,7 +178,6 @@
       box.appendChild(deleteBtn);
       box.appendChild(nameDiv);
       box.appendChild(input);
-
       boxesContainer.appendChild(box);
     }
 
@@ -181,7 +190,7 @@
 
       result.textContent = '';
 
-      // Ẩn tên và input
+      // Ẩn tất cả tên và input
       boxes.forEach(box => {
         const nameDiv = box.querySelector('.name');
         const input = box.querySelector('.edit-name');
@@ -191,27 +200,33 @@
 
       let count = 0;
       const shuffleInterval = setInterval(() => {
-        // Hiệu ứng lắc
+        // Hiệu ứng: rung + bay nhẹ
         boxes.forEach(box => {
           box.classList.add('shake');
-          setTimeout(() => box.classList.remove('shake'), 300);
+          box.classList.add('float');
+          setTimeout(() => {
+            box.classList.remove('shake');
+            box.classList.remove('float');
+          }, 400);
         });
 
-        // Xáo trộn vị trí
-        for (let i = boxes.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          boxesContainer.insertBefore(boxes[j], boxes[i]);
+        // Xáo trộn lộn xộn (ngẫu nhiên mạnh)
+        for (let i = 0; i < boxes.length; i++) {
+          const randIndex = Math.floor(Math.random() * boxes.length);
+          boxesContainer.insertBefore(boxes[randIndex], boxes[i]);
         }
 
         count++;
-        if (count > 15) clearInterval(shuffleInterval);
-      }, 150);
+        if (count > 25) clearInterval(shuffleInterval); // Shuffle 25 lần
+      }, 100);
     }
 
-    // Thêm hộp mẫu
+    // Tạo sẵn vài hộp
     addBox("Lan");
     addBox("Hùng");
     addBox("Trang");
+    addBox("An");
+    addBox("Minh");
   </script>
 
 </body>
