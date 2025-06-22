@@ -8,17 +8,25 @@
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #1d2b64, #f8cdda); /* nền gradient */
+      background: linear-gradient(135deg, #1d2b64, #f8cdda);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      overflow: hidden;
+      color: white;
+    }
+
+    .header {
+      font-size: 1.8em;
+      color: red;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
     }
 
     .message {
       font-size: 3em;
-      color: white;
       text-align: center;
       text-shadow: 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff00cc;
       animation: blink 2s infinite ease-in-out;
@@ -29,9 +37,45 @@
       50%  { opacity: 0.6; transform: scale(1.05);}
       100% { opacity: 1; transform: scale(1);}
     }
+
+    .countdown {
+      margin-top: 40px;
+      font-size: 1.5em;
+      color: #fff;
+      text-shadow: 0 0 8px black;
+    }
   </style>
 </head>
 <body>
-  <div class="message">🔒 Chưa mở, vui lòng chờ...</div>
+  <div class="header">🔒 Thuộc Quyền Facebook</div>
+  <div class="message">Chưa mở, vui lòng chờ...</div>
+  <div class="countdown" id="countdown">Đang tính thời gian...</div>
+
+  <script>
+    // Thời gian đích: 2 ngày kể từ bây giờ
+    const endTime = new Date().getTime() + 2 * 24 * 60 * 60 * 1000;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endTime - now;
+
+      if (distance <= 0) {
+        document.getElementById("countdown").innerHTML = "Đã mở!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const milliseconds = Math.floor((distance % 1000));
+
+      document.getElementById("countdown").innerHTML =
+        `⏳ Còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây ${milliseconds} ms`;
+    }
+
+    // Cập nhật liên tục từng 50ms
+    setInterval(updateCountdown, 50);
+  </script>
 </body>
 </html>
