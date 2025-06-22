@@ -2,232 +2,36 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Xáo Trộn Hộp</title>
+  <title>Chưa mở</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
-      background: #f4f4f4;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #1d2b64, #f8cdda); /* nền gradient */
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    #controls {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    #boxes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      max-width: 1000px;
-    }
-
-    .box {
-      width: 180px;
-      height: 180px;
-      background-color: #fff;
-      border: 3px solid #555;
-      border-radius: 15px;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.3s ease;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
     }
 
-    .box:hover {
-      transform: scale(1.05);
-    }
-
-    .name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      text-align: center;
-      word-wrap: break-word;
-    }
-
-    .delete-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: red;
+    .message {
+      font-size: 3em;
       color: white;
-      border: none;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .edit-name {
-      width: 85%;
-      padding: 6px;
-      font-size: 16px;
       text-align: center;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5), 0 0 20px #ff00cc;
+      animation: blink 2s infinite ease-in-out;
     }
 
-    #result {
-      margin-top: 30px;
-      font-size: 24px;
-      font-weight: bold;
-      color: green;
-      text-align: center;
-    }
-
-    button {
-      margin: 5px;
-      padding: 12px 20px;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background-color: #ddd;
-    }
-
-    button:hover {
-      background-color: #ccc;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .shake {
-      animation: shake 0.3s;
-    }
-
-    .float {
-      animation: floatUpDown 0.6s ease-in-out;
-    }
-
-    @keyframes shake {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(-4px, 4px); }
-      50% { transform: translate(4px, -4px); }
-      75% { transform: translate(-4px, -4px); }
-      100% { transform: translate(0, 0); }
-    }
-
-    @keyframes floatUpDown {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
+    @keyframes blink {
+      0%   { opacity: 1; transform: scale(1);}
+      50%  { opacity: 0.6; transform: scale(1.05);}
+      100% { opacity: 1; transform: scale(1);}
     }
   </style>
 </head>
 <body>
-
-  <div id="controls">
-    <button onclick="addBox()">➕ Thêm Hộp</button>
-    <button onclick="shuffleBoxes()">🔀 Sáo Trộn</button>
-  </div>
-
-  <div id="boxes"></div>
-
-  <div id="result"></div>
-
-  <script>
-    const boxesContainer = document.getElementById('boxes');
-    const result = document.getElementById('result');
-
-    function addBox(name = "Tên") {
-      const box = document.createElement('div');
-      box.className = 'box';
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = '×';
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.onclick = (e) => {
-        e.stopPropagation();
-        box.remove();
-      };
-
-      const input = document.createElement('input');
-      input.className = 'edit-name';
-      input.value = name;
-      input.oninput = () => {
-        nameDiv.textContent = input.value;
-      };
-
-      const nameDiv = document.createElement('div');
-      nameDiv.className = 'name';
-      nameDiv.textContent = name;
-
-      box.onclick = () => {
-        if (nameDiv.classList.contains('hidden')) {
-          nameDiv.classList.remove('hidden');
-          input.classList.remove('hidden');
-          result.textContent = `🎉 Bạn đã chọn: ${nameDiv.textContent}`;
-        }
-      };
-
-      box.appendChild(deleteBtn);
-      box.appendChild(nameDiv);
-      box.appendChild(input);
-      boxesContainer.appendChild(box);
-    }
-
-    function shuffleBoxes() {
-      const boxes = Array.from(document.querySelectorAll('.box'));
-      if (boxes.length < 2) {
-        alert("Cần ít nhất 2 hộp để sáo trộn!");
-        return;
-      }
-
-      result.textContent = '';
-
-      // Ẩn tất cả tên và input
-      boxes.forEach(box => {
-        const nameDiv = box.querySelector('.name');
-        const input = box.querySelector('.edit-name');
-        nameDiv.classList.add('hidden');
-        input.classList.add('hidden');
-      });
-
-      let count = 0;
-      const shuffleInterval = setInterval(() => {
-        // Hiệu ứng: rung + bay nhẹ
-        boxes.forEach(box => {
-          box.classList.add('shake');
-          box.classList.add('float');
-          setTimeout(() => {
-            box.classList.remove('shake');
-            box.classList.remove('float');
-          }, 400);
-        });
-
-        // Xáo trộn lộn xộn (ngẫu nhiên mạnh)
-        for (let i = 0; i < boxes.length; i++) {
-          const randIndex = Math.floor(Math.random() * boxes.length);
-          boxesContainer.insertBefore(boxes[randIndex], boxes[i]);
-        }
-
-        count++;
-        if (count > 25) clearInterval(shuffleInterval); // Shuffle 25 lần
-      }, 100);
-    }
-
-    // Tạo sẵn vài hộp
-    addBox("Lan");
-    addBox("Hùng");
-    addBox("Trang");
-    addBox("An");
-    addBox("Minh");
-  </script>
-
+  <div class="message">🔒 Chưa mở, vui lòng chờ...</div>
 </body>
 </html>
